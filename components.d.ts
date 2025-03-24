@@ -8,11 +8,8 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
-    Login: typeof import('./src/components/login.vue')['default']
     NButton: typeof import('naive-ui')['NButton']
     NInput: typeof import('naive-ui')['NInput']
-    NInputNumber: typeof import('naive-ui')['NInputNumber']
-    NTextField: typeof import('naive-ui')['NTextField']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
   }
