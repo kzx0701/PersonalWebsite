@@ -1,5 +1,5 @@
 <template>
-    <div class="flex fixed top-0 left-0 right-0 justify-between z-10 bg-transparent items-center p-[0.5rem]">
+    <div class="flex fixed top-0 left-0 right-0 justify-between z-10 bg-transparent items-center p-[1.5rem]">
         <div>
             <button class="button" data-text="Awesome">
                 <span class="actual-text">&nbsp;coco&nbsp;website&nbsp;</span>
