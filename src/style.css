@@ -1,5 +1,6 @@
 :root {
   /* 字体相关 */
+  font-size: 16px;
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
@@ -23,5 +24,17 @@
   }
   button {
     background-color: #f9f9f9;
+  }
+}
+
+@media screen and (min-width: 768px) {
+  :root {
+    font-size: 14px; /* 中等屏幕 */
+  }
+}
+
+@media screen and (min-width: 1024px) {
+  :root {
+    font-size: 16px; /* 大屏幕 */
   }
 }
