@@ -1,11 +1,11 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+</script>
 
 <template>
   <div>
-    <TopNavigation/>
+    <TopNavigation />
     <router-view></router-view>
   </div>
 </template>
 
-<style scoped>
-</style>
+<style scoped></style>

@@ -1,7 +1,7 @@
 <template>
     <div class="flex fixed top-0 left-0 right-0 justify-between z-10 bg-transparent items-center p-[1.5rem]">
         <div>
-            <button class="button" data-text="Awesome">
+            <button class="button" data-text="Awesome" @click="$router.push('/')">
                 <span class="actual-text">&nbsp;coco&nbsp;website&nbsp;</span>
                 <span aria-hidden="true" class="hover-text">&nbsp;coco&nbsp;website&nbsp;</span>
             </button>
@@ -40,7 +40,7 @@ import { toggleTheme, getCurrentTheme } from '../utils/changeTheme';
 import { ref } from 'vue';
 const isDarkTheme = ref(getCurrentTheme() === 'dark');
 // 主题切换
-const handleThemeChange = (e: Event) => {
+const handleThemeChange = () => {
     toggleTheme()
 }
 </script>

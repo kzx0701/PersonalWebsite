@@ -7,13 +7,6 @@
   /* background-color: #94d1ff; */
 }
 
-.dark {
-  --text-color: #ffffff;
-  --bg-color: #1a1a1a;
-  --link-hover: #535bf2;
-  --button-bg: #2d2d2d;
-}
-
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;
