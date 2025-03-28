@@ -1,6 +1,24 @@
 // 黑暗主题
 :root {
-  // --main-color: #121212;
+  // 登录页
   --login-bg-main-color: #434343;
   --login-bg-sub-color: black;
+  --login-btn-bg: rgb(14, 14, 26);
+  --login-btn-text: rgb(234, 234, 234);
+  --login-btn-shadow: #1f4c65;
+  --login-btn-hover: rgb(2, 29, 78);
+  --login-btn-hover-bg1: rgba(2, 29, 78, 0.681);
+  --login-btn-hover-bg2: rgba(31, 215, 232, 0.873);
+  --login-btn-hover-text: rgb(4, 4, 38);
+
+  // 注册弹窗
+  --registerModal--main-color: rgba(167, 139, 250, 1);
+  --registerModal--sub-color: rgba(167, 139, 250, 0.2);
+  --registerModal--bg: rgb(23, 23, 33);
+  --registerModal--input-text: rgba(243, 244, 246, 1);
+  --registerModal--input-bg: rgba(31, 41, 55, 1);
+  --registerModal--input-border: rgba(55, 65, 81, 1);
+  --registerModal--button-text: rgba(17, 24, 39, 1);
+  --registerModal--button-hover: rgba(139, 92, 246, 1);
 }
+                                       

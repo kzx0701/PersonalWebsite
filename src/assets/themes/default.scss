@@ -1,5 +1,22 @@
 // 默认主题
 :root {
+  // 登录页
   --login-bg-main-color: #74ebd5;
   --login-bg-sub-color: #d59fe6;
+  --login-btn-bg: #ffffff;
+  --login-btn-text: #b388ff;
+  --login-btn-shadow: rgba(179, 136, 255, 0.3);
+  --login-btn-hover: #b388ff;
+  --login-btn-hover-bg1: rgba(2, 29, 78, 0.681);
+  --login-btn-hover-bg2: rgba(31, 215, 232, 0.873);
+  --login-btn-hover-text: #ffffff;
+  // 注册弹窗
+  --registerModal--main-color: #7c3aed;
+  --registerModal--sub-color: rgba(167, 139, 250, 0.2);
+  --registerModal--bg: #ffffff;
+  --registerModal--input-text: rgba(243, 244, 246, 1);
+  --registerModal--input-bg: #f9fafb;
+  --registerModal--input-border: #d1d5db;
+  --registerModal--button-text: #ffffff;
+  --registerModal--button-hover: #7c3aed;
 }

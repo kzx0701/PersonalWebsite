@@ -1,10 +1,9 @@
 :root {
   /* 字体相关 */
-  font-size: 16px;
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  font-family: cursive, auto;
   line-height: 1.5;
   font-weight: 400;
-  /* background-color: #94d1ff; */
 }
 
 @media (prefers-color-scheme: light) {
