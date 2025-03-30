@@ -3,21 +3,23 @@
     <div class="form_frame">
       <h1 class="title">欢迎登录</h1>
       <div class="group">
-        <svg class="icon" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1024 1024">
+        <svg class="icon" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 24 24">
           <path
-            d="M858.5 763.6a374 374 0 0 0-80.6-119.5a375.63 375.63 0 0 0-119.5-80.6c-.4-.2-.8-.3-1.2-.5C719.5 518 760 444.7 760 362c0-137-111-248-248-248S264 225 264 362c0 82.7 40.5 156 102.8 201.1c-.4.2-.8.3-1.2.5c-44.8 18.9-85 46-119.5 80.6a375.63 375.63 0 0 0-80.6 119.5A371.7 371.7 0 0 0 136 901.8a8 8 0 0 0 8 8.2h60c4.4 0 7.9-3.5 8-7.8c2-77.2 33-149.5 87.8-204.3c56.7-56.7 132-87.9 212.2-87.9s155.5 31.2 212.2 87.9C779 752.7 810 825 812 902.2c.1 4.4 3.6 7.8 8 7.8h60a8 8 0 0 0 8-8.2c-1-47.8-10.9-94.3-29.5-138.2zM512 534c-45.9 0-89.1-17.9-121.6-50.4S340 407.9 340 362c0-45.9 17.9-89.1 50.4-121.6S466.1 190 512 190s89.1 17.9 121.6 50.4S684 316.1 684 362c0 45.9-17.9 89.1-50.4 121.6S557.9 534 512 534z"
-            fill="currentColor"></path>
+            d="M22 6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6zm-2 0l-8 5l-8-5h16zm0 12H4V8l8 5l8-5v10z"
+            fill="currentColor"
+          ></path>
         </svg>
-        <input id="username" v-model="username" class="input" type="text" placeholder="输入用户名" />
+        <input id="email" v-model="email" class="input" type="text" placeholder="输入登录邮箱" />
       </div>
       <div class="group">
         <svg stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="icon">
           <path
             d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z"
             stroke-linejoin="round"
-            stroke-linecap="round"></path>
+            stroke-linecap="round"
+          ></path>
         </svg>
-        <input id="password" v-model="password" class="input" type="password" placeholder="输入密码" />
+        <input id="password" v-model="password" class="input" type="password" placeholder="输入登录密码" />
       </div>
       <div class="flex gap-10">
         <button class="btn" @click="registerModalShow = true">注册</button>
@@ -39,7 +41,7 @@ import { getUserAuth } from "../services/userService";
 import { login } from "../utils/login";
 // 用户名、密码
 const password = ref("");
-const username = ref("");
+const email = ref("");
 
 const registerModalShow = ref(false);
 
@@ -51,9 +53,9 @@ onMounted(() => {
 
 // 登陆验证
 const loginVerify = () => {
-  console.log("username", username.value);
+  console.log("username", email.value);
   console.log("password", password.value);
-  login(username.value, password.value);
+  login(email.value, password.value);
 };
 </script>
 

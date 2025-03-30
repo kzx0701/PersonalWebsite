@@ -12,12 +12,13 @@
         <div v-if="passwordWarning" class="warning-text">{{ passwordWarning }}</div>
         <label for="confirmPassword">确认密码</label>
         <input placeholder="请输入确认密码" v-model="confirmPassword" type="password" />
+        <div v-if="confirmPasswordWarning" class="warning-text">{{ confirmPasswordWarning }}</div>
       </div>
     </form>
-    <button style="margin-top: 6%" class="sign" @click="submit">提交</button>
+    <button style="margin-top: 15%" class="sign" @click="submit">提交</button>
     <div class="social-message">
       <div class="line"></div>
-      <p class="message">Entre Details to view Virtual Tour</p>
+      <p class="message">邮箱方式注册</p>
       <div class="line"></div>
     </div>
   </div>
@@ -78,6 +79,17 @@ const formVerify = async () => {
     }
   } else {
     passwordWarning.value = "密码不能为空";
+    return false;
+  }
+  if (confirmPassword.value !== "") {
+    if (confirmPassword.value != password.value) {
+      confirmPasswordWarning.value = "确认密码与密码不一致";
+      return false;
+    } else {
+      confirmPasswordWarning.value = "";
+    }
+  } else {
+    confirmPasswordWarning.value = "确认密码不能为空";
     return false;
   }
   return true;
