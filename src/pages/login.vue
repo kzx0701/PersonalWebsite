@@ -6,8 +6,7 @@
         <svg class="icon" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 24 24">
           <path
             d="M22 6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6zm-2 0l-8 5l-8-5h16zm0 12H4V8l8 5l8-5v10z"
-            fill="currentColor"
-          ></path>
+            fill="currentColor"></path>
         </svg>
         <input id="email" v-model="email" class="input" type="text" placeholder="输入登录邮箱" />
       </div>
@@ -16,8 +15,7 @@
           <path
             d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z"
             stroke-linejoin="round"
-            stroke-linecap="round"
-          ></path>
+            stroke-linecap="round"></path>
         </svg>
         <input id="password" v-model="password" class="input" type="password" placeholder="输入登录密码" />
       </div>

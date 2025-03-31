@@ -1,32 +1,46 @@
 <template>
-  <!-- From Uiverse.io by VIJAYAACHI -->
   <div class="form-container">
-    <p class="title">新用户注册</p>
-    <form class="form">
-      <div class="input-group">
-        <label for="email">邮箱</label>
-        <input placeholder="请输入邮箱" v-model="email" id="email" name="email" type="email" />
-        <div v-if="emailWarning" class="warning-text">{{ emailWarning }}</div>
-        <label for="password">密码</label>
-        <input placeholder="请输入密码" v-model="password" id="password" name="password" type="password" />
-        <div v-if="passwordWarning" class="warning-text">{{ passwordWarning }}</div>
-        <label for="confirmPassword">确认密码</label>
-        <input placeholder="请输入确认密码" v-model="confirmPassword" type="password" />
-        <div v-if="confirmPasswordWarning" class="warning-text">{{ confirmPasswordWarning }}</div>
+    <transition name="fade" mode="out-in">
+      <div v-if="!loadingShow" class="w-full">
+        <p class="title">新用户注册</p>
+        <form class="form">
+          <div class="input-group">
+            <label for="email">邮箱</label>
+            <input placeholder="请输入邮箱" v-model="email" id="email" name="email" type="email" />
+            <div v-if="emailWarning" class="warning-text">{{ emailWarning }}</div>
+            <label for="password">密码</label>
+            <input placeholder="请输入密码" v-model="password" id="password" name="password" type="password" />
+            <div v-if="passwordWarning" class="warning-text">{{ passwordWarning }}</div>
+            <label for="confirmPassword">确认密码</label>
+            <input placeholder="请输入确认密码" v-model="confirmPassword" type="password" />
+            <div v-if="confirmPasswordWarning" class="warning-text">{{ confirmPasswordWarning }}</div>
+          </div>
+        </form>
+        <button style="margin-top: 15%" class="sign" @click="submit">
+          <div v-if="!submitClick">注册</div>
+          <LoaderV1 v-if="submitClick"></LoaderV1>
+        </button>
+        <div class="social-message">
+          <div class="line"></div>
+          <p class="message">邮箱方式注册</p>
+          <div class="line"></div>
+        </div>
       </div>
-    </form>
-    <button style="margin-top: 15%" class="sign" @click="submit">提交</button>
-    <div class="social-message">
-      <div class="line"></div>
-      <p class="message">邮箱方式注册</p>
-      <div class="line"></div>
-    </div>
+    </transition>
+    <transition name="fade" mode="out-in">
+      <div v-if="loadingShow" class="loader-container">
+        <Loader />
+        <button style="margin-top: 15%" class="sign">前往登录</button>
+      </div>
+    </transition>
   </div>
 </template>
 
 <script setup lang="ts">
 import { registerWithEmail } from "../utils/register";
 import { ref } from "vue";
+import Loader from "./Loader.vue";
+import LoaderV1 from "./LoaderV1.vue";
 // 注册表单数据
 const email = ref("");
 const password = ref("");
@@ -36,10 +50,19 @@ const emailWarning = ref("");
 const passwordWarning = ref("");
 const confirmPasswordWarning = ref("");
 
+const loadingShow = ref(false);
+const submitClick = ref(false);
+
 // 提交
 const submit = async () => {
   const isValid = await formVerify();
   if (!isValid) {
+    return;
+  }
+  submitClick.value = true;
+  // 添加确认对话框
+  const confirmed = window.confirm("确认提交注册信息吗？");
+  if (!confirmed) {
     return;
   }
   if (password.value !== confirmPassword.value && password.value !== "") {
@@ -49,7 +72,8 @@ const submit = async () => {
     console.log("密码不一致");
     return;
   } else {
-    await registerWithEmail(email.value, password.value);
+    loadingShow.value = true;
+    // await registerWithEmail(email.value, password.value);
   }
 };
 
@@ -99,14 +123,16 @@ const formVerify = async () => {
 <style lang="scss" scoped>
 // 弹框样式
 .form-container {
-  width: 320px;
+  width: 22rem;
   border-radius: 0.75rem;
   background-color: var(--registerModal--bg); // 更深的背景色
   padding: 2rem;
   color: rgba(229, 231, 235, 1); // 更亮的文字颜色
   position: absolute;
   z-index: 10;
-  border: 1px solid rgba(75, 85, 99, 0.5); // 添加边框
+  box-shadow: 0px 0px 7px #5d5d5d;
+  height: 30rem;
+  justify-items: center;
 }
 
 .title {
@@ -237,5 +263,32 @@ const formVerify = async () => {
 .warning-text {
   color: #f53f3f;
   margin: 0.5rem 0;
+}
+
+// 新增加载动画容器样式
+.loader-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--registerModal--bg);
+  border-radius: 0.75rem;
+}
+
+/* 添加在原有样式后面 */
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+  transform: translateY(10px);
 }
 </style>

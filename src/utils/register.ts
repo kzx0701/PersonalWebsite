@@ -9,5 +9,6 @@ export const registerWithEmail = async (email: string, password: string) => {
     console.error("注册失败", error);
   } else {
     console.log("注册成功", data);
+
   }
 };
