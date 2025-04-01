@@ -1,15 +1,18 @@
 <template>
   <div class="form-container">
+    <div class="w-full flex justify-end relative top-[-1rem] right-[-1rem]">
+      <v-icon icon="mdi-close" class="" @click="emit('close')"></v-icon>
+    </div>
     <transition name="fade" mode="out-in">
       <div v-if="!registerState.loading" class="w-full">
         <p class="title">新用户注册</p>
         <form class="form">
           <div class="input-group">
             <label for="email">邮箱</label>
-            <input placeholder="请输入邮箱" v-model="email" id="email" name="email" type="email" autocomplete="email"/>
+            <input placeholder="请输入邮箱" v-model="email" id="email" name="email" type="email" autocomplete="email" />
             <div v-if="warningText.email" class="warning-text">{{ warningText.email }}</div>
             <label for="password">密码</label>
-            <input placeholder="请输入密码" v-model="password" id="password" name="password" type="password" autocomplete="new-password"/>
+            <input placeholder="请输入密码" v-model="password" id="password" name="password" type="password" autocomplete="new-password" />
             <div v-if="warningText.password" class="warning-text">{{ warningText.password }}</div>
             <label for="confirmPassword">确认密码</label>
             <input placeholder="请输入确认密码" v-model="confirmPassword" id="confirmPassword" type="password" autocomplete="new-password" />
@@ -26,15 +29,19 @@
     </transition>
     <transition name="fade" mode="out-in">
       <div v-if="registerState.submit" class="loader-container">
-        <div v-if="registerState.loading">
-          <Loader />
-        </div>
-        <div v-if="registerState.success" class="text-center">
-          <v-icon icon="mdi-check-circle" class="result-icon text-emerald-400"></v-icon>
-          <p class="text-emerald-400 font-semibold py-2 text-lg">注册成功</p>
-          <div>恭喜您注册成功！您可以通过注册邮箱号码进行登录。</div>
-          <button style="margin-top: 15%" class="sign" @click="emit('close')">前往登录</button>
-        </div>
+        <transition name="fade" mode="out-in">
+          <div v-if="registerState.loading" class="h-full content-center">
+            <Loader />
+          </div>
+          <div v-else-if="registerState.success" class="text-center w-full h-full flex flex-col align-center justify-between">
+            <div style="margin-top: 20%">
+              <v-icon icon="mdi-check-circle" class="result-icon text-emerald-400"></v-icon>
+              <p class="text-emerald-400 font-semibold py-2 text-lg">注册成功</p>
+              <div>恭喜您注册成功！您可以通过注册邮箱号码进行登录。</div>
+            </div>
+            <button style="margin-top: 15%" class="sign" @click="emit('close')">前往登录</button>
+          </div>
+        </transition>
       </div>
     </transition>
   </div>
@@ -82,8 +89,12 @@ const submit = async () => {
     return;
   }
   registerState.value.submit = true;
-  registerState.value.success = true;
-  // await registerWithEmail(email.value, password.value);
+  registerState.value.loading = true;
+  setTimeout(() => {
+    registerState.value.loading = false;
+    registerState.value.success = true;
+  }, 3000);
+  await registerWithEmail(email.value, password.value);
 };
 
 // 表单验证
@@ -283,7 +294,7 @@ const formVerify = async () => {
   height: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
   background-color: var(--registerModal--bg);
   border-radius: 0.75rem;
