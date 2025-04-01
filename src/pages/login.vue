@@ -23,13 +23,13 @@
         <button class="btn" @click="registerModalShow = true">注册</button>
         <button @click="loginVerify" class="btn">登录</button>
       </div>
-      <!-- 注册弹窗 -->
-      <v-dialog v-model="registerModalShow">
-        <div class="flex justify-center items-center">
-          <RegisterModal />
-        </div>
-      </v-dialog>
     </div>
+    <!-- 注册弹窗 -->
+    <v-dialog v-model="registerModalShow" @update:modelValue="(val) => (registerModalShow = val)">
+      <div class="flex justify-center items-center">
+        <RegisterModal @close="registerModalShow = false" />
+      </div>
+    </v-dialog>
   </div>
 </template>
 

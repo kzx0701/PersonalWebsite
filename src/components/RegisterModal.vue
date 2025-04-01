@@ -1,25 +1,22 @@
 <template>
   <div class="form-container">
     <transition name="fade" mode="out-in">
-      <div v-if="!loadingShow" class="w-full">
+      <div v-if="!registerState.loading" class="w-full">
         <p class="title">新用户注册</p>
         <form class="form">
           <div class="input-group">
             <label for="email">邮箱</label>
-            <input placeholder="请输入邮箱" v-model="email" id="email" name="email" type="email" />
-            <div v-if="emailWarning" class="warning-text">{{ emailWarning }}</div>
+            <input placeholder="请输入邮箱" v-model="email" id="email" name="email" type="email" autocomplete="email"/>
+            <div v-if="warningText.email" class="warning-text">{{ warningText.email }}</div>
             <label for="password">密码</label>
-            <input placeholder="请输入密码" v-model="password" id="password" name="password" type="password" />
-            <div v-if="passwordWarning" class="warning-text">{{ passwordWarning }}</div>
+            <input placeholder="请输入密码" v-model="password" id="password" name="password" type="password" autocomplete="new-password"/>
+            <div v-if="warningText.password" class="warning-text">{{ warningText.password }}</div>
             <label for="confirmPassword">确认密码</label>
-            <input placeholder="请输入确认密码" v-model="confirmPassword" type="password" />
-            <div v-if="confirmPasswordWarning" class="warning-text">{{ confirmPasswordWarning }}</div>
+            <input placeholder="请输入确认密码" v-model="confirmPassword" id="confirmPassword" type="password" autocomplete="new-password" />
+            <div v-if="warningText.confirmPassword" class="warning-text">{{ warningText.confirmPassword }}</div>
           </div>
         </form>
-        <button style="margin-top: 15%" class="sign" @click="submit">
-          <div v-if="!submitClick">注册</div>
-          <LoaderV1 v-if="submitClick"></LoaderV1>
-        </button>
+        <button style="margin-top: 15%" class="sign" @click="submit">注册</button>
         <div class="social-message">
           <div class="line"></div>
           <p class="message">邮箱方式注册</p>
@@ -28,9 +25,16 @@
       </div>
     </transition>
     <transition name="fade" mode="out-in">
-      <div v-if="loadingShow" class="loader-container">
-        <Loader />
-        <button style="margin-top: 15%" class="sign">前往登录</button>
+      <div v-if="registerState.submit" class="loader-container">
+        <div v-if="registerState.loading">
+          <Loader />
+        </div>
+        <div v-if="registerState.success" class="text-center">
+          <v-icon icon="mdi-check-circle" class="result-icon text-emerald-400"></v-icon>
+          <p class="text-emerald-400 font-semibold py-2 text-lg">注册成功</p>
+          <div>恭喜您注册成功！您可以通过注册邮箱号码进行登录。</div>
+          <button style="margin-top: 15%" class="sign" @click="emit('close')">前往登录</button>
+        </div>
       </div>
     </transition>
   </div>
@@ -38,20 +42,26 @@
 
 <script setup lang="ts">
 import { registerWithEmail } from "../utils/register";
-import { ref } from "vue";
+import { nextTick, ref } from "vue";
 import Loader from "./Loader.vue";
-import LoaderV1 from "./LoaderV1.vue";
+const emit = defineEmits(["close"]);
 // 注册表单数据
 const email = ref("");
 const password = ref("");
 const confirmPassword = ref("");
 // 提示文本
-const emailWarning = ref("");
-const passwordWarning = ref("");
-const confirmPasswordWarning = ref("");
-
-const loadingShow = ref(false);
-const submitClick = ref(false);
+const warningText = ref({
+  email: "" as string,
+  password: "" as string,
+  confirmPassword: "" as string,
+});
+// 注册状态(提交、加载中、成功、失败)
+const registerState = ref({
+  submit: false as boolean,
+  loading: false as boolean,
+  success: false as boolean,
+  fail: false as boolean,
+});
 
 // 提交
 const submit = async () => {
@@ -59,22 +69,21 @@ const submit = async () => {
   if (!isValid) {
     return;
   }
-  submitClick.value = true;
+  warningText.value = {
+    email: "",
+    password: "",
+    confirmPassword: "",
+  };
+  // 添加微任务延迟，确保DOM更新
+  await nextTick();
   // 添加确认对话框
   const confirmed = window.confirm("确认提交注册信息吗？");
   if (!confirmed) {
     return;
   }
-  if (password.value !== confirmPassword.value && password.value !== "") {
-    console.log("email", email.value);
-    console.log("password", password.value);
-    console.log("confirmPassword", confirmPassword.value);
-    console.log("密码不一致");
-    return;
-  } else {
-    loadingShow.value = true;
-    // await registerWithEmail(email.value, password.value);
-  }
+  registerState.value.submit = true;
+  registerState.value.success = true;
+  // await registerWithEmail(email.value, password.value);
 };
 
 // 表单验证
@@ -85,35 +94,35 @@ const formVerify = async () => {
   const reg = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
   if (email.value !== "") {
     if (reg.test(email.value)) {
-      emailWarning.value = "";
+      warningText.value.email = "";
     } else {
-      emailWarning.value = "请输入正确的邮箱格式";
+      warningText.value.email = "请输入正确的邮箱格式";
       return false;
     }
   } else {
-    emailWarning.value = "邮箱不能为空";
+    warningText.value.email = "邮箱不能为空";
     return false;
   }
   if (password.value !== "") {
     if (password.value.length >= 6) {
-      passwordWarning.value = "";
+      warningText.value.password = "";
     } else {
-      passwordWarning.value = "密码长度不能小于6";
+      warningText.value.password = "密码长度不能小于6";
       return false;
     }
   } else {
-    passwordWarning.value = "密码不能为空";
+    warningText.value.password = "密码不能为空";
     return false;
   }
   if (confirmPassword.value !== "") {
     if (confirmPassword.value != password.value) {
-      confirmPasswordWarning.value = "确认密码与密码不一致";
+      warningText.value.confirmPassword = "确认密码与密码不一致";
       return false;
     } else {
-      confirmPasswordWarning.value = "";
+      warningText.value.confirmPassword = "";
     }
   } else {
-    confirmPasswordWarning.value = "确认密码不能为空";
+    warningText.value.confirmPassword = "确认密码不能为空";
     return false;
   }
   return true;
@@ -278,6 +287,7 @@ const formVerify = async () => {
   align-items: center;
   background-color: var(--registerModal--bg);
   border-radius: 0.75rem;
+  padding: 2rem;
 }
 
 /* 添加在原有样式后面 */
@@ -290,5 +300,10 @@ const formVerify = async () => {
 .fade-leave-to {
   opacity: 0;
   transform: translateY(10px);
+}
+
+// 注册结果
+.result-icon {
+  font-size: 3rem;
 }
 </style>

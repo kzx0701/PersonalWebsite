@@ -8,6 +8,7 @@ import { createVuetify } from "vuetify";
 import * as components from "vuetify/components";
 import * as directives from "vuetify/directives";
 import "./style.css";
+import "@mdi/font/css/materialdesignicons.css";
 
 // 设置默认主题
 initTheme();
