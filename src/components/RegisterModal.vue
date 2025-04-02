@@ -9,7 +9,7 @@
         <form class="form">
           <div class="input-group">
             <label for="email">邮箱</label>
-            <input placeholder="请输入邮箱" v-model="email" id="email" name="email" type="email" autocomplete="email" />
+            <input placeholder="请输入邮箱" v-model="email" id="email" name="email" type="search" autocomplete="email" />
             <div v-if="warningText.email" class="warning-text">{{ warningText.email }}</div>
             <label for="password">密码</label>
             <input placeholder="请输入密码" v-model="password" id="password" name="password" type="password" autocomplete="new-password" />
@@ -39,7 +39,18 @@
               <p class="text-emerald-400 font-semibold py-2 text-lg">注册成功</p>
               <div>恭喜您注册成功！您可以通过注册邮箱号码进行登录。</div>
             </div>
-            <button style="margin-top: 15%" class="sign" @click="emit('close')">前往登录</button>
+            <button style="margin-top: 15%" class="sign" @click="emit('close')">返回登录</button>
+          </div>
+          <div v-else-if="registerState.fail" class="text-center w-full h-full flex flex-col align-center justify-between">
+            <div style="margin-top: 20%">
+              <v-icon icon="mdi-close-circle" class="result-icon text-red-400"></v-icon>
+              <p class="text-red-400 font-semibold py-2 text-lg">注册失败</p>
+              <div>抱歉！您的账号注册失败。失败原因：{{ registerMessage }}</div>
+            </div>
+            <div style="margin-top: 15%" class="flex gap-4">
+              <button class="sign" @click="registerState.submit = false">重新注册</button>
+              <button class="sign" @click="emit('close')">返回登录</button>
+            </div>
           </div>
         </transition>
       </div>
@@ -69,6 +80,7 @@ const registerState = ref({
   success: false as boolean,
   fail: false as boolean,
 });
+const registerMessage = ref("");
 
 // 提交
 const submit = async () => {
@@ -90,11 +102,17 @@ const submit = async () => {
   }
   registerState.value.submit = true;
   registerState.value.loading = true;
-  setTimeout(() => {
+  const registerResult = await registerWithEmail(email.value, password.value);
+  if (registerResult.res) {
     registerState.value.loading = false;
     registerState.value.success = true;
-  }, 3000);
-  await registerWithEmail(email.value, password.value);
+    registerState.value.fail = false;
+  } else {
+    registerMessage.value = registerResult.message;
+    registerState.value.loading = false;
+    registerState.value.fail = true;
+    registerState.value.success = false;
+  }
 };
 
 // 表单验证

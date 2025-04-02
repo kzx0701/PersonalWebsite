@@ -1,31 +1,35 @@
 <template>
   <div class="login_frame">
-    <div class="form_frame">
-      <h1 class="title">欢迎登录</h1>
-      <div class="group">
-        <svg class="icon" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 24 24">
-          <path
-            d="M22 6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6zm-2 0l-8 5l-8-5h16zm0 12H4V8l8 5l8-5v10z"
-            fill="currentColor"
-          ></path>
-        </svg>
-        <input id="email" v-model="email" class="input" type="text" placeholder="请输入登录邮箱" />
+    <transition name="fade" mode="out-in">
+      <div class="form_frame" v-if="!loginSubmit">
+        <h1 class="title">欢迎登录</h1>
+        <div class="group">
+          <svg class="icon" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 24 24">
+            <path
+              d="M22 6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6zm-2 0l-8 5l-8-5h16zm0 12H4V8l8 5l8-5v10z"
+              fill="currentColor"></path>
+          </svg>
+          <input id="email" v-model="email" class="input" type="text" placeholder="请输入登录邮箱" />
+        </div>
+        <div class="group">
+          <svg stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="icon">
+            <path
+              d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z"
+              stroke-linejoin="round"
+              stroke-linecap="round"></path>
+          </svg>
+          <input id="password" v-model="password" class="input" type="password" placeholder="请输入登录密码" />
+        </div>
+        <div v-if="warningText" class="text-red-400">{{ warningText }}</div>
+        <div class="flex gap-10">
+          <button class="btn" @click="registerModalShow = true">注册</button>
+          <button @click="login" class="btn">登录</button>
+        </div>
       </div>
-      <div class="group">
-        <svg stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="icon">
-          <path
-            d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z"
-            stroke-linejoin="round"
-            stroke-linecap="round"
-          ></path>
-        </svg>
-        <input id="password" v-model="password" class="input" type="password" placeholder="请输入登录密码" />
+      <div v-else>
+        <Loader></Loader>
       </div>
-      <div class="flex gap-10">
-        <button class="btn" @click="registerModalShow = true">注册</button>
-        <button @click="loginVerify" class="btn">登录</button>
-      </div>
-    </div>
+    </transition>
     <!-- 注册弹窗 -->
     <v-dialog persistent v-model="registerModalShow" @update:modelValue="(val) => (registerModalShow = val)">
       <div class="flex justify-center items-center">
@@ -38,12 +42,17 @@
 <script lang="ts" setup>
 import { onMounted, ref } from "vue";
 import { getUserAuth } from "../services/userService";
-import { login } from "../utils/login";
+import { loginWithEmail } from "../utils/login";
+import router from "../router";
+import Loader from "../components/Loader.vue";
 // 用户名、密码
 const password = ref("");
 const email = ref("");
 
+const warningText = ref("");
+
 const registerModalShow = ref(false);
+const loginSubmit = ref(false);
 
 onMounted(() => {
   getUserAuth().then((res) => {
@@ -52,10 +61,14 @@ onMounted(() => {
 });
 
 // 登陆验证
-const loginVerify = () => {
-  console.log("username", email.value);
-  console.log("password", password.value);
-  login(email.value, password.value);
+const login = async () => {
+  loginSubmit.value = true;
+  const response = await loginWithEmail(email.value, password.value);
+  if (response.res) {
+    router.push("/");
+  } else {
+    warningText.value = response.message;
+  }
 };
 </script>
 
@@ -91,7 +104,7 @@ const loginVerify = () => {
   align-items: center;
   position: relative;
   max-width: 20rem;
-  margin-bottom: 10px;
+  margin-bottom: 1rem;
   animation: titleFadeIn 1s ease-in-out;
   animation-delay: 0.2s; // 输入框延迟出现
 }
