@@ -1,4 +1,5 @@
 import { supabase } from "../lib/supabaseClient";
+import { useAuthStore } from "../stores/authStore";
 
 // 邮箱登录
 export const loginWithEmail = async (userName: string, password: string) => {
@@ -9,12 +10,8 @@ export const loginWithEmail = async (userName: string, password: string) => {
       return { res: false, message: error.message };
     }
     console.log("登录成功", data);
-    const sessionData = {
-      token: data.session.access_token,
-      expiresAt: Date.now() + data.session.expires_in * 1000, // 转换为毫秒
-      user: data.user,
-    };
-    localStorage.setItem("coco-session", JSON.stringify(sessionData));
+    const authStore = useAuthStore();
+    authStore.setSession(data);
     return { res: true, message: "登录成功" };
   } catch {
     console.log("登录异常");
